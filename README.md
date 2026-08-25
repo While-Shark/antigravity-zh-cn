@@ -24,15 +24,13 @@
 
 ---
 
-## 📂 项目结构
+## 📂 截图 (汉化完成度90%)
 
-```text
-├── dict.json                 # 汉化词典文件（包含精确词条与正则匹配规则）
-├── patch.js                  # 核心汉化 / 还原引擎脚本 (Node.js)
-├── 一键汉化Antigravity.bat   # Windows 端一键执行脚本
-├── 一键汉化Antigravity.sh    # macOS 端一键执行脚本
-└── README.md                 # 项目说明文档
-```
+![1.png](img/1.png)
+
+![2.png](img/2.png)
+
+![3.png](img/3.png)
 
 ---
 
