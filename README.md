@@ -61,7 +61,7 @@
    chmod +x ./一键汉化Antigravity.sh
    ./一键汉化Antigravity.sh
    ```
-   *（或直接执行 `node patch.js`）*
+   *（注：修改 `/Applications` 系统应用需要管理员权限，根据提示输入 Mac 密码即可；若直接执行 node，可使用 `sudo node patch.js`）*
 3. 根据终端提示按回车确认路径及操作选项。
 4. 重新打开 Antigravity 即可。
 
