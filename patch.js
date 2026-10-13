@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const readline = require('readline');
@@ -304,12 +304,15 @@ function performInstall(appPaths) {
             }
         } else if (node.nodeType === 1) { // ELEMENT_NODE
             if (node.tagName === 'SCRIPT' || node.tagName === 'STYLE') return;
-            const attrs = ['placeholder', 'title', 'aria-label', 'value'];
+            const attrs = ['placeholder', 'title', 'aria-label', 'value', 'tooltip', 'data-tooltip'];
             for (let i = 0; i < attrs.length; i++) {
                 const attr = attrs[i];
                 const val = node.getAttribute(attr);
-                if (val && map.has(val.trim())) {
-                    node.setAttribute(attr, map.get(val.trim()));
+                if (val && val.trim()) {
+                    const res = translateText(val);
+                    if (res !== val) {
+                        node.setAttribute(attr, res);
+                    }
                 }
             }
             const children = node.childNodes;
@@ -356,6 +359,38 @@ function performInstall(appPaths) {
 })();
 `;
         fs.writeFileSync(preloadPath, content + injector, 'utf8');
+    }
+
+    // (E) menu.js
+    const menuPath = path.join(appPaths.extractDir, 'dist', 'menu.js');
+    if (fs.existsSync(menuPath)) {
+        let content = fs.readFileSync(menuPath, 'utf8');
+        content = content
+            .replace(/label:\s*'New Window'/g, "label: '新建窗口'")
+            .replace(/label:\s*'Docs'/g, "label: '官方文档'")
+            .replace(/label:\s*'Connect to WSL'/g, "label: '连接到 WSL'")
+            .replace(/label:\s*'Reopen Locally'/g, "label: '在本地重新打开'");
+        fs.writeFileSync(menuPath, content, 'utf8');
+    }
+
+    // (F) main.js (原生退出确认对话框)
+    const mainPath = path.join(appPaths.extractDir, 'dist', 'main.js');
+    if (fs.existsSync(mainPath)) {
+        let content = fs.readFileSync(mainPath, 'utf8');
+        content = content
+            .replace("buttons: ['Cancel', 'Quit']", "buttons: ['取消', '退出']")
+            .replace("title: 'Confirm Quit'", "title: '确认退出'")
+            .replace("message: 'Are you sure you want to quit?'", "message: '您确定要退出吗？'")
+            .replace("detail: 'There may be agents or background tasks running.'", "detail: '后台可能仍有智能体或任务正在运行。'");
+        fs.writeFileSync(mainPath, content, 'utf8');
+    }
+
+    // (G) provisionSplash.js (WSL 初始化提示)
+    const splashPath = path.join(appPaths.extractDir, 'dist', 'provisionSplash.js');
+    if (fs.existsSync(splashPath)) {
+        let content = fs.readFileSync(splashPath, 'utf8');
+        content = content.replace("Setting up WSL:", "正在配置 WSL:");
+        fs.writeFileSync(splashPath, content, 'utf8');
     }
 
     // 4. 重新打包

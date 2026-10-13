@@ -12,3 +12,6 @@ yarn-error.log*
 app_extracted_patch/
 *.bak
 *.log
+
+# IDE
+.idea/
