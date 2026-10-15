@@ -173,6 +173,23 @@ function loadDictionary() {
     }
 }
 
+// macOS 下修复被修改文件的签名及 Gatekeeper 隔离属性
+function fixMacOsSignature(appPaths) {
+    if (process.platform === 'darwin') {
+        console.log('\x1b[33m[*] 正在为 macOS 应用重新签名并解除隔离属性...\x1b[0m');
+        try {
+            const appBundle = path.resolve(appPaths.resourcesDir, '..', '..');
+            if (appBundle.endsWith('.app') && fs.existsSync(appBundle)) {
+                execSync(`codesign --force --deep --sign - "${appBundle}"`, { stdio: 'ignore' });
+                execSync(`xattr -cr "${appBundle}"`, { stdio: 'ignore' });
+                console.log('      ✔ macOS 签名与安全隔离属性已自动修复完成！');
+            }
+        } catch (signErr) {
+            console.warn('      [提示] 自动重签名遇到警告，建议在终端执行: codesign --force --deep --sign - /Applications/Antigravity.app');
+        }
+    }
+}
+
 // 还原为原版
 function performRestore(appPaths) {
     console.log('\n\x1b[33m>>> 正在执行还原为官方原版英文...\x1b[0m');
@@ -182,6 +199,7 @@ function performRestore(appPaths) {
     }
     try {
         fs.copyFileSync(appPaths.bakPath, appPaths.asarPath);
+        fixMacOsSignature(appPaths);
         console.log('\x1b[32m========================================================\x1b[0m');
         console.log('\x1b[32m       ✔ 已成功还原为官方原版英文！                   \x1b[0m');
         console.log('\x1b[32m========================================================\x1b[0m\n');
@@ -315,6 +333,14 @@ function performInstall(appPaths) {
                     }
                 }
             }
+            if (node.shadowRoot) {
+                translateNode(node.shadowRoot);
+            }
+            const children = node.childNodes;
+            for (let i = 0; i < children.length; i++) {
+                translateNode(children[i]);
+            }
+        } else if (node.nodeType === 11) { // DOCUMENT_FRAGMENT (e.g. shadowRoot)
             const children = node.childNodes;
             for (let i = 0; i < children.length; i++) {
                 translateNode(children[i]);
@@ -396,20 +422,46 @@ function performInstall(appPaths) {
     // 4. 重新打包
     console.log('\x1b[33m[4/4] 正在重新打包 app.asar 并应用补丁...\x1b[0m');
     try {
-        execSync(`npx --yes @electron/asar pack "${appPaths.extractDir}" "${appPaths.asarPath}"`, { stdio: 'inherit' });
+        const unpackArg = fs.existsSync(path.join(appPaths.extractDir, 'node_modules', 'chrome-devtools-mcp'))
+            ? ' --unpack "**/chrome-devtools-mcp/**"'
+            : '';
+        execSync(`npx --yes @electron/asar pack "${appPaths.extractDir}" "${appPaths.asarPath}"${unpackArg}`, { stdio: 'inherit' });
         fs.rmSync(appPaths.extractDir, { recursive: true, force: true });
     } catch (e) {
         console.error('\x1b[31m[错误] 打包失败！\x1b[0m', e);
         process.exit(1);
     }
 
+    fixMacOsSignature(appPaths);
+
     console.log('\n\x1b[32m========================================================\x1b[0m');
     console.log('\x1b[32m       ✔ Antigravity 全量汉化补丁已成功更新打包！      \x1b[0m');
     console.log('\x1b[32m========================================================\x1b[0m\n');
 }
 
+// 检查是否正在运行
+function checkRunningApp() {
+    try {
+        let isRunning = false;
+        if (process.platform === 'win32') {
+            const tasklist = execSync('tasklist', { encoding: 'utf8' });
+            isRunning = /antigravity\.exe/i.test(tasklist);
+        } else if (process.platform === 'darwin') {
+            const ps = execSync('pgrep -x Antigravity || true', { encoding: 'utf8' }).trim();
+            isRunning = !!ps;
+        }
+        if (isRunning) {
+            console.log('\x1b[31m[⚠️  重要警告] 检测到 Antigravity 软件当前正在运行中！\x1b[0m');
+            console.log('\x1b[33m   Electron 应用在运行时会把原文件的偏移表缓存在内存中。');
+            console.log('   如果在软件运行中注入汉化，会导致代码偏移错位并产生语法错误，汉化将无法生效！');
+            console.log('   👉 请务必先彻底退出 Antigravity（Mac 下按 Cmd + Q，确保 Dock 栏图标下无小圆点）后再继续。\x1b[0m\n');
+        }
+    } catch (e) {}
+}
+
 // 主流程启动
 async function main() {
+    checkRunningApp();
     const rl = createRL();
     try {
         // 1. 获取安装路径
