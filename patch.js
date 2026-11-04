@@ -246,7 +246,9 @@ function performInstall(appPaths) {
             .replace(/Check for Updates/g, '检查更新')
             .replace(/Checking for Updates\.\.\./g, '正在检查更新...')
             .replace(/Downloading Update\.\.\./g, '正在下载更新...')
-            .replace(/Restart to Update/g, '重启以应用更新');
+            .replace(/Restart to Update/g, '重启以应用更新')
+            .replace("message: 'No updates available'", "message: '当前已是最新版本，暂无可用更新'")
+            .replace("buttons: ['OK']", "buttons: ['确定']");
         fs.writeFileSync(updaterPath, content, 'utf8');
     }
 
@@ -315,7 +317,11 @@ function performInstall(appPaths) {
         if (node.nodeType === 3) { // TEXT_NODE
             const val = node.nodeValue;
             if (val && val.trim()) {
-                const res = translateText(val);
+                let res = translateText(val);
+                // 解决指令引导语中动词 "Type" 被误译为 "类型" 的问题（如：Type / and select plan...）
+                if (val.trim() === 'Type' && node.nextSibling && (node.nextSibling.textContent || '').trim().includes('/')) {
+                    res = val.replace('Type', '输入');
+                }
                 if (res !== val) {
                     node.nodeValue = res;
                 }
@@ -407,7 +413,8 @@ function performInstall(appPaths) {
             .replace("buttons: ['Cancel', 'Quit']", "buttons: ['取消', '退出']")
             .replace("title: 'Confirm Quit'", "title: '确认退出'")
             .replace("message: 'Are you sure you want to quit?'", "message: '您确定要退出吗？'")
-            .replace("detail: 'There may be agents or background tasks running.'", "detail: '后台可能仍有智能体或任务正在运行。'");
+            .replace("detail: 'There may be agents or background tasks running.'", "detail: '后台可能仍有智能体或任务正在运行。'")
+            .replace("label: 'Quit'", "label: '退出'");
         fs.writeFileSync(mainPath, content, 'utf8');
     }
 
@@ -417,6 +424,16 @@ function performInstall(appPaths) {
         let content = fs.readFileSync(splashPath, 'utf8');
         content = content.replace("Setting up WSL:", "正在配置 WSL:");
         fs.writeFileSync(splashPath, content, 'utf8');
+    }
+
+    // (H) ipcHandlers.js (工作区选择对话框)
+    const ipcPath = path.join(appPaths.extractDir, 'dist', 'ipcHandlers.js');
+    if (fs.existsSync(ipcPath)) {
+        let content = fs.readFileSync(ipcPath, 'utf8');
+        content = content
+            .replace("title: 'Open workspace'", "title: '打开工作区'")
+            .replace("title: 'Open workspaces'", "title: '打开多个工作区'");
+        fs.writeFileSync(ipcPath, content, 'utf8');
     }
 
     // 4. 重新打包
