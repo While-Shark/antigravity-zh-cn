@@ -4,10 +4,14 @@ const { execSync } = require('child_process');
 const readline = require('readline');
 const os = require('os');
 
-console.log('\x1b[36m========================================================\x1b[0m');
-console.log('\x1b[36m        Antigravity 跨平台汉化 / 还原管理工具           \x1b[0m');
-console.log(`\x1b[36m           当前操作系统: ${process.platform === 'darwin' ? 'macOS' : (process.platform === 'win32' ? 'Windows' : process.platform)} \x1b[0m`);
-console.log('\x1b[36m========================================================\x1b[0m\n');
+const REPO_URL = 'https://github.com/While-Shark/antigravity-zh-cn';
+const osName = process.platform === 'darwin' ? 'macOS' : (process.platform === 'win32' ? 'Windows' : process.platform);
+
+console.log('\x1b[36m================================================================\x1b[0m');
+console.log('\x1b[36m             Antigravity 跨平台汉化 / 还原管理工具              \x1b[0m');
+console.log(`\x1b[36m                     当前操作系统: ${osName}                      \x1b[0m`);
+console.log(`\x1b[36m  开源地址: ${REPO_URL}  \x1b[0m`);
+console.log('\x1b[36m================================================================\x1b[0m\n');
 
 const dictPath = path.join(__dirname, 'dict.json');
 

@@ -4,9 +4,10 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
-echo "========================================================"
-echo "          Antigravity macOS 汉化 / 还原管理工具         "
-echo "========================================================"
+echo "================================================================"
+echo "             Antigravity macOS 汉化 / 还原管理工具              "
+echo "  开源地址: https://github.com/While-Shark/antigravity-zh-cn  "
+echo "================================================================"
 echo ""
 
 NODE_BIN="$(which node 2>/dev/null || command -v node 2>/dev/null)"
