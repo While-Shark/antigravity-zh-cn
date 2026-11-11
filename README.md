@@ -122,6 +122,18 @@
 
 ---
 
+## 📈 Star History
+
+<a href="https://www.star-history.com/#While-Shark/antigravity-zh-cn&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=While-Shark/antigravity-zh-cn&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=While-Shark/antigravity-zh-cn&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=While-Shark/antigravity-zh-cn&type=Date" />
+ </picture>
+</a>
+
+---
+
 ## 📄 开源许可 (License)
 
 本项目采用 [MIT License](./LICENSE) 协议开源。
