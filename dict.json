@@ -1304,7 +1304,23 @@
     "Allow/deny agent browser file downloads from specific sites.": "允许或禁止智能体通过浏览器从指定站点下载文件。",
     "Run (unsandboxed)": "运行 (沙箱外)",
     "Download from": "下载来源",
-    "Browse": "浏览"
+    "Browse": "浏览",
+    "This computer": "当前计算机",
+    "Auto": "自动",
+    "Controls permissions for remote conversations.": "控制远程对话的操作权限。",
+    "Tool permissions": "工具权限设置",
+    "Network access rules": "网络访问规则",
+    "Input Box": "输入框设置",
+    "Input box": "输入框设置",
+    "Queued messages": "排队消息",
+    "Send message": "发送消息",
+    "Send Message": "发送消息",
+    "Choose which key sends a message in the chat composer.": "选择在聊天输入框中发送消息的按键。",
+    "Show All": "显示全部",
+    "Show Less": "收起",
+    "Give Feedback": "提供反馈",
+    "Give feedback": "提供反馈",
+    "Learn more": "了解更多"
   },
   "patterns": [
     {
