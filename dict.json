@@ -1320,7 +1320,37 @@
     "Show Less": "收起",
     "Give Feedback": "提供反馈",
     "Give feedback": "提供反馈",
-    "Learn more": "了解更多"
+    "Learn more": "了解更多",
+    "Models & Usage": "模型与用量",
+    "Manage your model quota and credits.": "管理您的模型配额与积分。",
+    "You are subscribed to the best Google AI plan.": "您已订阅最高级别的 Google AI 套餐。",
+    "Enable AI credit overages": "启用 AI 积分超额抵扣",
+    "Enable AI Credit Overages": "启用 AI 积分超额抵扣",
+    "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits.": "开启后，当模型配额用尽时，Antigravity 将使用您的 AI 积分继续处理模型请求。系统始终会优先消耗模型配额，然后再使用 AI 积分。",
+    "Orchestrator Settings": "编排器设置",
+    "Orchestrator settings": "编排器设置",
+    "Choose the models Orchestrator uses. A larger, smarter orchestrator model with a faster, cheaper executor gives high quality for fewer tokens.": "选择编排器使用的模型。采用更强大、更智能的编排模型搭配更快速、更经济的执行模型，能以更少的 Token 消耗获得高质量结果。",
+    "Orchestrator Model": "编排模型",
+    "Orchestrator model": "编排模型",
+    "Plans the work, makes design decisions, and reviews the result. Pick a top-tier model. You can also pick one per conversation from the Orchestrator row in the model menu.": "负责规划工作、制定设计决策并审查结果。建议选择顶级模型，您也可以在模型菜单的编排器栏中为每个对话单独指定。",
+    "Executor Model": "执行模型",
+    "Executor model": "执行模型",
+    "Carries out the plan: searches, edits, builds, and tests. Pick a faster, cheaper model.": "负责执行计划：搜索、编辑、构建与测试。建议选择更快速、更经济的模型。",
+    "Gemini Models": "Gemini 模型",
+    "Gemini models": "Gemini 模型",
+    "Claude and GPT models": "Claude 与 GPT 模型",
+    "Claude and GPT Models": "Claude 与 GPT 模型",
+    "Weekly Limit Remaining": "每周剩余额度",
+    "Weekly limit remaining": "每周剩余额度",
+    "Five Hour Limit Remaining": "5 小时剩余额度",
+    "Five hour limit remaining": "5 小时剩余额度",
+    "5-Hour Limit Remaining": "5 小时剩余额度",
+    "Configure built-in browser, link opening, and browser subagent preferences.": "配置内置浏览器、链接打开方式及浏览器子智能体偏好设置。",
+    "Open links in": "链接打开方式",
+    "Download location": "下载保存路径",
+    "Browsing history": "浏览记录",
+    "Browser actuation rules": "浏览器自动化操作规则",
+    "Configure allowed and denied URLs for the browser subagent. It runs in the built-in browser, so no separate browser install is needed.": "配置允许和禁止浏览器子智能体访问的 URL 规则。它直接在内置浏览器中运行，无需单独安装其他浏览器。"
   },
   "patterns": [
     {
@@ -1354,6 +1384,70 @@
     {
       "match": "(\\d+)\\s+rules?\\s+active",
       "replace": "$1 条规则处于活动状态"
+    },
+    {
+      "match": "Your plan:\\s*(.+)",
+      "replace": "当前套餐：$1"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (\\d+)\\s+days?,\\s*(\\d+)\\s+hours?\\.",
+      "replace": "您已使用部分每周额度，将在 $1 天 $2 小时后完全重置。"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (\\d+)\\s+hours?,\\s*(\\d+)\\s+minutes?\\.",
+      "replace": "您已使用部分每周额度，将在 $1 小时 $2 分钟后完全重置。"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (\\d+)\\s+days?\\.",
+      "replace": "您已使用部分每周额度，将在 $1 天后完全重置。"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (\\d+)\\s+hours?\\.",
+      "replace": "您已使用部分每周额度，将在 $1 小时后完全重置。"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (\\d+)\\s+minutes?\\.",
+      "replace": "您已使用部分每周额度，将在 $1 分钟后完全重置。"
+    },
+    {
+      "match": "You have used some of your weekly limit, it will fully refresh in (.+)\\.",
+      "replace": "您已使用部分每周额度，将在 $1 后完全重置。"
+    },
+    {
+      "match": "You have used some of your (?:five|5)[- ]hour limit, it will fully refresh in (\\d+)\\s+hours?,\\s*(\\d+)\\s+minutes?\\.",
+      "replace": "您已使用部分 5 小时额度，将在 $1 小时 $2 分钟后完全重置。"
+    },
+    {
+      "match": "You have used some of your (?:five|5)[- ]hour limit, it will fully refresh in (\\d+)\\s+hours?\\.",
+      "replace": "您已使用部分 5 小时额度，将在 $1 小时后完全重置。"
+    },
+    {
+      "match": "You have used some of your (?:five|5)[- ]hour limit, it will fully refresh in (\\d+)\\s+minutes?\\.",
+      "replace": "您已使用部分 5 小时额度，将在 $1 分钟后完全重置。"
+    },
+    {
+      "match": "You have used some of your (?:five|5)[- ]hour limit, it will fully refresh in (.+)\\.",
+      "replace": "您已使用部分 5 小时额度，将在 $1 后完全重置。"
+    },
+    {
+      "match": "Refreshes in (\\d+)\\s+days?,\\s*(\\d+)\\s+hours?",
+      "replace": "$1 天 $2 小时后重置"
+    },
+    {
+      "match": "Refreshes in (\\d+)\\s+hours?,\\s*(\\d+)\\s+minutes?",
+      "replace": "$1 小时 $2 分钟后重置"
+    },
+    {
+      "match": "Refreshes in (\\d+)\\s+days?",
+      "replace": "$1 天后重置"
+    },
+    {
+      "match": "Refreshes in (\\d+)\\s+hours?",
+      "replace": "$1 小时后重置"
+    },
+    {
+      "match": "Refreshes in (\\d+)\\s+minutes?",
+      "replace": "$1 分钟后重置"
     }
   ]
 }
